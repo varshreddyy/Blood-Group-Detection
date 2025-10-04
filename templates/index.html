@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Group Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Blood Group Detection</h1>
+            <p>Fingerprint-based AI analysis</p>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ "%.1f"|format(stats.accuracy) }}%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ (stats.total_params / 1000000)|round(1) }}M</div>
+                <div class="stat-label">Parameters</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ stats.epoch }}</div>
+                <div class="stat-label">Epochs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">8</div>
+                <div class="stat-label">Classes</div>
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <section class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <input type="file" id="fileInput" accept="image/*" hidden>
+                <div class="upload-content">
+                    <p>Click to upload fingerprint image</p>
+                    <span>JPG, PNG, JPEG</span>
+                </div>
+            </div>
+
+            <div class="divider">or</div>
+
+            <button class="btn-secondary" id="webcamBtn">Use Webcam</button>
+            
+            <video id="video" autoplay hidden></video>
+            <canvas id="canvas" hidden></canvas>
+
+            <!-- Preview -->
+            <div class="preview-section" id="previewSection" hidden>
+                <img id="preview" alt="Preview">
+                <button class="btn-primary" id="analyzeBtn">Analyze</button>
+            </div>
+
+            <!-- Loading -->
+            <div class="loading-section" id="loadingSection" hidden>
+                <div class="loading-spinner"></div>
+                <p>Analyzing...</p>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section" id="resultsSection" hidden>
+            <div class="result-card">
+                <div class="result-main">
+                    <span class="result-label">Blood Group</span>
+                    <h2 class="result-value" id="bloodGroup">-</h2>
+                </div>
+                <div class="result-confidence">
+                    <span class="result-label">Confidence</span>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" id="confidenceFill"></div>
+                    </div>
+                    <span class="confidence-text" id="confidenceText">0%</span>
+                </div>
+            </div>
+
+            <!-- Probability Distribution -->
+            <div class="probability-section">
+                <h3>Distribution</h3>
+                <div id="probabilityBars"></div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-secondary" id="newAnalysisBtn">New Analysis</button>
+                <button class="btn-primary" id="downloadBtn">Download Report</button>
+            </div>
+        </section>
+
+        <!-- Performance -->
+        <section class="performance-section">
+            <h3>Model Performance</h3>
+            <div class="matrix-container">
+                <img src="{{ url_for('static', filename='images/confusion_matrix_best.png') }}" 
+                     alt="Confusion Matrix"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                <div class="no-matrix" style="display:none">
+                    <p>Confusion matrix unavailable</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
